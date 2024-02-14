@@ -24,7 +24,7 @@ export const Header: React.FC<HeaderProps> = () => {
     if (canConnect) {
       onConnect();
     }
-  }, [canConnect]);
+  }, [canConnect, setAddress]);
   return (
     <div>
       <header className="bg-black h-12">
@@ -34,17 +34,17 @@ export const Header: React.FC<HeaderProps> = () => {
           </div>
           <div>
             {!joyidInfo && (
-              <div className="mt-2 border-[2px] border-gray-500 px-2 py-[1px]">
+              <div className="mt-2 border-[2px] border-sky-700 px-2 py-[1px] font-extrabold text-lg text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg">
                 <button
                   onClick={() => setCanConnect(true)}
-                  className="font-extrabold text-gray-200 text-lg "
+                  className="font-extrabold text-lg"
                 >
                   Connect Wallet
                 </button>
               </div>
             )}
             {joyidInfo && (
-              <div className="border-[2px] border-gray-500 mt-2">
+              <div className="border-[2px] border-gray-500 mt-2  rounded-lg">
                 <div className=" text-gray-200 text-lg px-2 py-[1px] font-extrabold ">
                   {`${address.slice(0, 10)}...${address.slice(-10)}`}
                 </div>

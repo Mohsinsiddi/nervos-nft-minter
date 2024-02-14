@@ -13,27 +13,23 @@ export const Main: React.FC<MainProps> = () => {
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    console.log("Email", email);
-    console.log("Addresss", recAddress);
+
     const data = { email, address: recAddress };
     try {
       const res = await axios.post("/api/nftmint", {
         ...data,
       });
       if (res.status) {
-        toast.success(`NFT Minted! ${res.data.txHash.slice(0, 30)}... `, {
+        toast.success(`NFT Minted! `, {
           duration: 3000,
-          // className: "w-full",
         });
       } else {
         toast.error("Error while minting NFT", {
           duration: 3000,
         });
       }
-
-      console.log("Res", res);
     } catch (error) {
-      toast.error("Error while minting NFT", { duration: 3000 });
+      toast.error("Catch Error while minting NFT", { duration: 3000 });
       console.log("Error", error);
     }
   };
@@ -101,7 +97,8 @@ export const Main: React.FC<MainProps> = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="Email Id"
                   required
                 ></input>
               </div>
