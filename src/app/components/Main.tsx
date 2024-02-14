@@ -1,23 +1,45 @@
 "use client";
 import { useAppContext } from "@/context";
+import axios from "axios";
 import Image from "next/image";
-HTMLElement;
+import { useState } from "react";
+import toast from "react-hot-toast";
 interface MainProps {}
 export const Main: React.FC<MainProps> = () => {
   const { address, setAddress } = useAppContext();
 
-  const onSubmit = (e: any) => {
-    e.preventDefault();
-    console.log("called", e);
+  const [recAddress, setRecAddress] = useState(address);
+  const [email, setEmail] = useState("");
 
-    const address = document.getElementById("address")?.value;
-    const email = document.getElementById("email")?.value;
+  const onSubmit = async (e: any) => {
+    e.preventDefault();
     console.log("Email", email);
-    console.log("Addresss", address);
+    console.log("Addresss", recAddress);
+    const data = { email, address: recAddress };
+    try {
+      const res = await axios.post("/api/nftmint", {
+        ...data,
+      });
+      if (res.status) {
+        toast.success(`NFT Minted! ${res.data.txHash.slice(0, 30)}... `, {
+          duration: 3000,
+          // className: "w-full",
+        });
+      } else {
+        toast.error("Error while minting NFT", {
+          duration: 3000,
+        });
+      }
+
+      console.log("Res", res);
+    } catch (error) {
+      toast.error("Error while minting NFT", { duration: 3000 });
+      console.log("Error", error);
+    }
   };
 
   return (
-    <div className="mt-36 h-96">
+    <div className="mt-6 h-96">
       <main>
         <div className="flex flex-col">
           <div className="flex justify-center items-center mb-3 font-extrabold text-3xl">
@@ -51,13 +73,18 @@ export const Main: React.FC<MainProps> = () => {
                       Recipient Nervos CKB Address:
                     </label>
                   </div>
-                  <div className="block mb-2 text-sm text-white cursor-pointer border-[1px] border-gray-200 px-2 rounded-md bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                  <div
+                    onClick={() => setRecAddress(address)}
+                    className="block mb-2 text-sm text-white cursor-pointer border-[1px] border-gray-200 px-2 rounded-md bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+                  >
                     Insert JoyID Address
                   </div>
                 </div>
                 <input
+                  onChange={(e) => setRecAddress(e.target.value)}
                   type="address"
                   id="address"
+                  value={recAddress}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                   placeholder="Nervos Recipient Address"
                   required
@@ -71,6 +98,7 @@ export const Main: React.FC<MainProps> = () => {
                   Your Email
                 </label>
                 <input
+                  onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   id="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
